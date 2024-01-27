@@ -1,1 +1,20 @@
-import numpy as np
+%matplotlib inline
+
+from numpy import *
+from numpy.linalg import norm
+
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+import matplotlib.pyplot as plt
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
+from matplotlib.pyplot import *
+from numpy import *
+
+# Định nghĩa 1 hàm
+def f(x):
+    return x**3-25*x**2-50*x+1
+x = arange(-20, 30, 1) # Miền vẽ từ -20 đến 30, 2 điểm vẽ liên tiếp cách nhau 5 đơn vị
+plt.xlabel('x',fontsize=16) # Đặt tên cho trục x
+plt.ylabel('f(x)',fontsize=16) #Đặt tên cho trục y
+plt.plot(x,f(x)) #Lệnh vẽ
+plt.show() #Hiển thị
