@@ -18,3 +18,11 @@ plt.xlabel('x',fontsize=16) # Đặt tên cho trục x
 plt.ylabel('f(x)',fontsize=16) #Đặt tên cho trục y
 plt.plot(x,f(x)) #Lệnh vẽ
 plt.show() #Hiển thị
+
+def f(x):
+    return x*sin(1/x)
+x = arange(-0.7, 0.7, 0.001)
+plt.xlabel('x',fontsize=16)
+plt.ylabel('f(x)',fontsize=16)
+plt.plot(x,f(x))
+plt.show()
