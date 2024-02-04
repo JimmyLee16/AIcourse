@@ -26,3 +26,4 @@ plt.xlabel('x',fontsize=16)
 plt.ylabel('f(x)',fontsize=16)
 plt.plot(x,f(x))
 plt.show()
+plt.show
