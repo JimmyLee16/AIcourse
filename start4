@@ -1,0 +1,11 @@
+# Import the necessary libraries
+from PIL import Image # Mở một ảnh trong thư mục nào đó
+from numpy import asarray # Biến 1 ảnh thành ma trận
+import numpy as np
+import matplotlib.pyplot as plt # Biến ma trận thành ảnh
+# load the image and convert into
+# numpy array
+img = Image.open('/content/anhhoahau.jpeg')
+img_matrix = asarray(img) #Biến ảnh img bên trên thành 1 tenso=nhiều ma trận chồng lên nhau
+img_matrix
+np.save('/content/img.npy', img_matrix)
