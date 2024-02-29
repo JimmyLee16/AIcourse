@@ -1,0 +1,195 @@
+21:14 28/02/2024 THỰC HÀNH MẠNG CNN_PHANBIETCHOMEO - BG AI FOR BEGINER.ipynb - Colaboratory
+https://colab.research.google.com/drive/1L4W6F3dvgKbNuKxL73Sbgea39nrNkyJ2#scrollTo=hFaLmVzSPetw&printMode=true 1/5
+from google.colab import drive
+drive.mount('/content/drive')
+path = "/content/drive/MyDrive/AI School Class/CatandDogDataset1/"
+import os
+os.path.isdir(path)
+import numpy as np # Đưa vào thư viện tính toán
+from keras.preprocessing.image import ImageDataGenerator #Đưa vào thư viện xử lý ảnh
+from keras.models import Sequential #Đưa vào thư viện để tạo mô hình mạng nơ ron
+from keras.layers import Dropout, Flatten, Dense # Các thư viện để xây dựng các lớp của CNN
+from keras import applications # Đưa vào thư viện để lấy các trọng số của những mạng nơ ron nổi tiếng
+# image dimensions
+img_width, img_height = 150, 150 # Quy định kích cỡ của ảnh
+# top_model_weights_path = path + 'Transfer Learning Models//bottleneck_fc_model.h5'
+nb_train_samples = 2000 #
+nb_validation_samples = 800
+epochs = 50 # SỐ lần mạng nơ ron học
+batch_size = 16 # Số ảnh mà mỗi lần cho mạng nơ ron học
+import os # Đưa vào hệ thống xử lý hiện tại
+base_dir = path + "CatandDogDataset" #Tạo thư mục
+model_dir = path + "Transfer Learning Models" #Thư mục chứa mô hình
+train_dir = os.path.join(base_dir, 'train') #Thư mục để train
+validation_dir = os.path.join(base_dir, 'validation') #Thư mục để kiểm tra
+# Directory with our training cat pictures
+train_cats_dir = os.path.join(train_dir, 'cats')
+# Directory with our training dog pictures
+train_dogs_dir = os.path.join(train_dir, 'dogs')
+# Directory with our validation cat pictures
+validation_cats_dir = os.path.join(validation_dir, 'cats')
+# Directory with our validation dog pictures
+validation_dogs_dir = os.path.join(validation_dir, 'dogs')
+train_dog_fnames = os.listdir(train_dogs_dir)
+train_dog_fnames.sort()
+print(train_dog_fnames[:10])
+train_cat_fnames = os.listdir(train_cats_dir)
+print(train_cat_fnames[:10])
+21:14 28/02/2024 THỰC HÀNH MẠNG CNN_PHANBIETCHOMEO - BG AI FOR BEGINER.ipynb - Colaboratory
+https://colab.research.google.com/drive/1L4W6F3dvgKbNuKxL73Sbgea39nrNkyJ2#scrollTo=hFaLmVzSPetw&printMode=true 2/5
+# %cd /content/gdrive/'My Drive'/'AI School Class'/
+base_dir = path + 'CatandDogDataset'
+train_dir = os.path.join(base_dir, 'train')
+validation_dir = os.path.join(base_dir, 'validation')
+test_dir = os.path.join(base_dir, 'validation')
+# Directory with our training cat pictures
+train_cats_dir = os.path.join(train_dir, 'cats')
+# Directory with our training dog pictures
+train_dogs_dir = os.path.join(train_dir, 'dogs')
+# Directory with our validation cat pictures
+validation_cats_dir = os.path.join(validation_dir, 'cats')
+# Directory with our validation dog pictures
+validation_dogs_dir = os.path.join(validation_dir, 'dogs')
+# Directory with our validation cat pictures
+test_cats_dir = os.path.join(test_dir, 'cats')
+# Directory with our validation dog pictures
+test_dogs_dir = os.path.join(test_dir, 'dogs')
+print('total training cat images:', len(os.listdir(train_cats_dir)))
+print('total training dog images:', len(os.listdir(train_dogs_dir)))
+print('total validation cat images:', len(os.listdir(validation_cats_dir)))
+print('total validation dog images:', len(os.listdir(validation_dogs_dir)))
+print('total test cat images:', len(os.listdir(test_cats_dir)))
+print('total test dog images:', len(os.listdir(test_dogs_dir)))
+import random
+#idx = random.randint(0,1000)
+idx=10
+train_cats_dir
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+img_path = train_cats_dir + "/" + "cat." + str(idx) + ".jpg"
+img = mpimg.imread(img_path)
+plt.imshow(img)
+21:14 28/02/2024 THỰC HÀNH MẠNG CNN_PHANBIETCHOMEO - BG AI FOR BEGINER.ipynb - Colaboratory
+https://colab.research.google.com/drive/1L4W6F3dvgKbNuKxL73Sbgea39nrNkyJ2#scrollTo=hFaLmVzSPetw&printMode=true 3/5
+#Xây dựng mạng nơ ron
+from keras import layers
+from keras import models
+model = models.Sequential() #Tạo ra 1 khung của CNN tuần tự
+model.add(layers.Conv2D(32, (3, 3), activation='relu',
+input_shape=(150, 150, 3)))# Layer Covolution gồm 32 node, mỗi filter
+#kích thước 3*3, sử dụng hàm kích hoạt dạng ReLu
+model.add(layers.MaxPooling2D((2, 2))) # Thêm 1 layer Pooling dùng pooling dạng max
+model.add(layers.Conv2D(64, (3, 3), activation='relu'))# Thêm vào 1 tầng Convolution
+model.add(layers.MaxPooling2D((2, 2))) #Thêm 1taangf Pooling
+model.add(layers.Conv2D(128, (3, 3), activation='relu'))
+model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(128, (3, 3), activation='relu'))
+model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(128, (3, 3), activation='relu'))
+model.add(layers.AveragePooling2D((2, 2)))
+model.add(layers.Flatten()) #Trải phẳng 1 ma trận thành véc tơ
+model.add(layers.Dense(256, activation='relu')) # Thêm vào 1 lớp ẩn của mạng nơ ron để dùng tính toán
+#bao gồm 512 nơ ron, hàm kích hoạt ReLu
+model.add(layers.Dense(512, activation='relu'))
+model.add(layers.Dense(1, activation='sigmoid')) # Lớp out put gồm 1 nơ ron, hàm kích hoạt là hàm Sigmoil
+# cho kết quả là 1 số trong khoảng (0,1)=xác suất để ảnh là con mèo
+model.summary()
+# Cài dặt quá trình học
+from keras import optimizers
+from tensorflow.keras import optimizers
+model.compile(loss='binary_crossentropy', optimizer=optimizers.RMSprop(lr=1e-4), metrics=['acc'])
+#Định nghĩa hàm loss, phương pháp tìm cực tiểu hàm loss: RMSprop, tốc độ học: 0.0001,độ chính xác acc
+#Thay đổi tỉ lệ các phần tử trong ma trận ảnh, biến mỗi số trong ma trận về khoảng (0,1)
+from keras.preprocessing.image import ImageDataGenerator
+# All images will be rescaled by 1./255
+train_datagen = ImageDataGenerator(rescale=1./255)
+test_datagen = ImageDataGenerator(rescale=1./255)
+train_generator = train_datagen.flow_from_directory(
+# This is the target directory
+train_dir,
+# All images will be resized to 150x150
+target_size=(150, 150),
+batch_size=20,
+# Since we use binary_crossentropy loss, we need binary labels
+class_mode='binary')
+validation_generator = test_datagen.flow_from_directory(
+validation_dir,
+target_size=(150, 150),
+batch_size=20,
+class_mode='binary')
+for data batch, labels batch in train generator:
+21:14 28/02/2024 THỰC HÀNH MẠNG CNN_PHANBIETCHOMEO - BG AI FOR BEGINER.ipynb - Colaboratory
+https://colab.research.google.com/drive/1L4W6F3dvgKbNuKxL73Sbgea39nrNkyJ2#scrollTo=hFaLmVzSPetw&printMode=true 4/5
+for data_batch, labels_batch in train_generator:
+print('data batch shape:', data_batch.shape)
+print('labels batch shape:', labels_batch.shape)
+break
+# Mỗi lần đưa vào 20 ảnh để học, mỗi ảnh kích thước 150*150*3
+#Học, training mô hình
+history = model.fit(
+train_generator,
+steps_per_epoch=100,
+# epochs=30,
+epochs=10,
+validation_data=validation_generator,
+validation_steps=50)
+# %cd /content/gdrive/'My Drive'/'AI School Class'/
+model.save(path + 'nhandangchomeo_10_epochs.h5') #Lưu mô hình
+# %cd /content/gdrive/'My Drive'/'AI School Class'/
+# Load Model để dùng
+from keras.models import load_model
+MODEL_FILE = path + "nhandangchomeo_41_epochs.h5"
+model_test = load_model(MODEL_FILE)
+test_data_generator= ImageDataGenerator(rescale=1./255)
+test_data_dir2="/content/drive/MyDrive/AI School Class/ANHCHOMEO"
+test_generator1 = test_data_generator.flow_from_directory(
+test_data_dir2,
+target_size=(img_width, img_height),
+batch_size=1,
+class_mode="binary",
+shuffle=False)
+21:14 28/02/2024 THỰC HÀNH MẠNG CNN_PHANBIETCHOMEO - BG AI FOR BEGINER.ipynb - Colaboratory
+https://colab.research.google.com/drive/1L4W6F3dvgKbNuKxL73Sbgea39nrNkyJ2#scrollTo=hFaLmVzSPetw&printMode=true 5/5
+#Vẽ đồ thị để kiểm tra độ chính xác của huấn luyện
+import matplotlib.pyplot as plt
+acc = history.history['acc']
+val_acc = history.history['val_acc']
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+epochs = range(len(acc))
+plt.plot(epochs, acc, 'bo', label='Training acc')
+plt.plot(epochs, val_acc, 'b', label='Validation acc')
+plt.title('Training and validation accuracy')
+plt.legend()
+plt.figure()
+plt.plot(epochs, loss, 'bo', label='Training loss')
+plt.plot(epochs, val_loss, 'b', label='Validation loss')
+plt.title('Training and validation loss')
+plt.legend()
+plt.show()
+# Thử nhận dạng
+TEST_SIZE = 50
+probabilities = model_test.predict(validation_generator, TEST_SIZE)
+for index, probability in enumerate(probabilities[:TEST_SIZE]):
+print(index, probability)
+image_path = validation_dir + "/" +validation_generator.filenames[index]
+img = mpimg.imread(image_path)
+plt.imshow(img)
+if probability > 0.7:
+plt.title("%.2f" % (probability[0]*100) + "% dog")
+else:
+plt.title("%.2f" % ((1-probability[0])*100) + "% cat")
+plt.show()
+validation_dir1="/content/drive/MyDrive/AI/ANHCHOMEO"
+validation_generator1 = test_datagen.flow_from_directory(
+validation_dir1,
+target_size=(150, 150),
+batch_size=20,
+class_mode='binary')
+probabilities = model_test.predict(validation_generator1, 8)
+for index, probability in enumerate(probabilities):
+print(index, probability)
+image_path = validation_dir1 + "/" +validation_generator1.filenames[index]
+img = mpimg.imread(image_path)
+plt.imshow(img)
+if probability > 0 5:
