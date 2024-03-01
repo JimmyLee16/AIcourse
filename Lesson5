@@ -1,5 +1,4 @@
-21:14 28/02/2024 THỰC HÀNH MẠNG CNN_PHANBIETCHOMEO - BG AI FOR BEGINER.ipynb - Colaboratory
-https://colab.research.google.com/drive/1L4W6F3dvgKbNuKxL73Sbgea39nrNkyJ2#scrollTo=hFaLmVzSPetw&printMode=true 1/5
+5
 from google.colab import drive
 drive.mount('/content/drive')
 path = "/content/drive/MyDrive/AI School Class/CatandDogDataset1/"
