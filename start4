@@ -1,4 +1,4 @@
-# Import the necessary libraries
+### Import the necessary libraries
 from PIL import Image # Mở một ảnh trong thư mục nào đó
 from numpy import asarray # Biến 1 ảnh thành ma trận
 import numpy as np
