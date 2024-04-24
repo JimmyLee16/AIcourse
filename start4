@@ -9,3 +9,4 @@ img = Image.open('/content/anhhoahau.jpeg')
 img_matrix = asarray(img) #Biến ảnh img bên trên thành 1 tenso=nhiều ma trận chồng lên nhau
 img_matrix
 np.save('/content/img.npy', img_matrix)
+###
